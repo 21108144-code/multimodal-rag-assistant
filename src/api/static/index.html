@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimodal RAG</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>Multimodal RAG</h1>
+                <button id="new-chat-btn" title="New Chat">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    New Chat
+                </button>
+            </div>
+        </header>
+
+        <main class="chat-interface">
+            <div id="results-area" class="chat-history">
+                <!-- Messages will appear here -->
+                <div class="message assistant-message">
+                    <div class="message-content">
+                        <div class="avatar assistant-avatar">AI</div>
+                        <div class="message-text">Hello! I am your AI assistant. Ask me anything about your documents.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-container-centered">
+                    <div id="preview-container" class="hidden">
+                        <img id="image-preview" alt="Preview">
+                        <button id="remove-image-btn">×</button>
+                    </div>
+
+                    <div class="input-group">
+                        <button id="upload-area" class="icon-btn" title="Upload Image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                        </button>
+                        <input type="file" id="image-input" accept="image/*" hidden>
+
+                        <input type="text" id="text-input" placeholder="Send a message..." autocomplete="off">
+
+                        <button id="send-btn" class="icon-btn primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        console.log("Inlined Script Loaded");
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM Loaded");
+
+            const textInput = document.getElementById('text-input');
+            const sendBtn = document.getElementById('send-btn');
+            const resultsArea = document.getElementById('results-area');
+            const imageInput = document.getElementById('image-input');
+            const uploadArea = document.getElementById('upload-area');
+            const previewContainer = document.getElementById('preview-container');
+            const imagePreview = document.getElementById('image-preview');
+            const removeImageBtn = document.getElementById('remove-image-btn');
+            const newChatBtn = document.getElementById('new-chat-btn');
+
+            // State
+            let selectedImage = null;
+            let chatHistory = [];
+
+            // Event Listeners
+            if (newChatBtn) {
+                newChatBtn.addEventListener('click', () => {
+                    chatHistory = [];
+                    resultsArea.innerHTML = `
+                        <div class="message assistant-message">
+                            <div class="message-content">
+                                <div class="avatar assistant-avatar">AI</div>
+                                <div class="message-text">Hello! I am your AI assistant. Ask me anything about your documents.</div>
+                            </div>
+                        </div>`;
+                    console.log("Chat cleared");
+                });
+            }
+
+            if (sendBtn) {
+                sendBtn.addEventListener('click', handleQuery);
+            }
+
+            if (textInput) {
+                textInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleQuery();
+                    }
+                });
+            }
+
+            // Image Upload Handling
+            if (uploadArea) {
+                uploadArea.addEventListener('click', () => imageInput.click());
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = 'var(--primary-color)';
+                });
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.style.borderColor = 'var(--border-color)';
+                });
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = 'var(--border-color)';
+                    if (e.dataTransfer.files.length > 0) {
+                        handleImageSelect(e.dataTransfer.files[0]);
+                    }
+                });
+            }
+
+            if (imageInput) {
+                imageInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        handleImageSelect(e.target.files[0]);
+                    }
+                });
+            }
+
+            if (removeImageBtn) removeImageBtn.addEventListener('click', clearImage);
+
+            function handleImageSelect(file) {
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file');
+                    return;
+                }
+                selectedImage = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    uploadArea.classList.add('hidden');
+                    previewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function clearImage() {
+                selectedImage = null;
+                imageInput.value = '';
+                uploadArea.classList.remove('hidden');
+                previewContainer.classList.add('hidden');
+            }
+
+            async function handleQuery() {
+                const text = textInput.value.trim();
+                if (!text && !selectedImage) return;
+
+                // Add user message to UI
+                appendMessage('user', text, selectedImage);
+
+                // Add to history
+                if (text) {
+                    chatHistory.push({ role: "user", content: text });
+                }
+
+                // Clear inputs
+                textInput.value = '';
+                const currentImage = selectedImage;
+                clearImage();
+
+                // Show loading
+                const loadingId = appendLoading();
+
+                try {
+                    let data;
+                    if (currentImage) {
+                        const formData = new FormData();
+                        formData.append('file', currentImage);
+                        const response = await fetch('/query/image', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        data = await response.json();
+                    } else {
+                        const response = await fetch('/query', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                text: text,
+                                history: chatHistory
+                            })
+                        });
+
+                        if (!response.ok) {
+                            const errData = await response.json().catch(() => ({}));
+                            throw new Error(JSON.stringify(errData) || 'API Request Failed');
+                        }
+
+                        data = await response.json();
+                    }
+
+                    removeMessage(loadingId);
+                    appendMessage('assistant', data.answer, null, data.sources);
+                    chatHistory.push({ role: "assistant", content: data.answer });
+
+                } catch (error) {
+                    removeMessage(loadingId);
+                    appendMessage('system', `Error: ${error.message}`);
+                    console.error('Query Error:', error);
+                }
+            }
+
+            function appendMessage(role, text, image = null, sources = null) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${role}-message`;
+
+                let contentHtml = `<div class="message-content">
+                    <div class="avatar ${role}-avatar">${role === 'user' ? 'U' : 'AI'}</div>
+                    <div class="message-text">`;
+
+                if (image) {
+                    const imgUrl = URL.createObjectURL(image);
+                    contentHtml += `<img src="${imgUrl}" class="message-image" alt="User upload">`;
+                }
+
+                if (text) {
+                    const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                    contentHtml += formattedText;
+                }
+
+                if (sources && sources.length > 0) {
+                    contentHtml += `<div class="sources-container">
+                        <div class="sources-title">Sources</div>
+                        <ul class="sources-list">
+                            ${sources.map(s => `<li>${s.metadata.text ? s.metadata.text.substring(0, 100) + '...' : 'Image Match'}</li>`).join('')}
+                        </ul>
+                    </div>`;
+                }
+
+                contentHtml += `</div></div>`;
+
+                msgDiv.innerHTML = contentHtml;
+                resultsArea.appendChild(msgDiv);
+                resultsArea.scrollTop = resultsArea.scrollHeight;
+                return msgDiv.id;
+            }
+
+            function appendLoading() {
+                const id = 'loading-' + Date.now();
+                const msgDiv = document.createElement('div');
+                msgDiv.id = id;
+                msgDiv.className = 'message assistant-message';
+                msgDiv.innerHTML = `
+                    <div class="message-content">
+                        <div class="avatar assistant-avatar">AI</div>
+                        <div class="message-text">
+                            <div class="typing-indicator"><span></span><span></span><span></span></div>
+                        </div>
+                    </div>`;
+                resultsArea.appendChild(msgDiv);
+                resultsArea.scrollTop = resultsArea.scrollHeight;
+                return id;
+            }
+
+            function removeMessage(id) {
+                const el = document.getElementById(id);
+                if (el) el.remove();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+name: CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: pip install requests
+    - name: Deploy to Staging
+      run: |
+        echo "Deploying to Staging Environment..."
+        # Simulate deployment
+        ./scripts/deploy.sh staging
+      env:
+        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+
+  deploy-prod:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - uses: actions/checkout@v3
+    - name: Deploy to Production
+      run: |
+        echo "Deploying to Production Environment..."
+        # Simulate deployment
+        ./scripts/deploy.sh prod
+      env:
+        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}

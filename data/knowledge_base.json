@@ -1,0 +1,101 @@
+[
+    {
+        "text": "Information Security (InfoSec) is the practice of protecting information by mitigating information risks. It involves preventing unauthorized access, use, disclosure, disruption, modification, inspection, recording, or destruction of information."
+    },
+    {
+        "text": "Cybersecurity is the practice of protecting systems, networks, and programs from digital attacks. These cyberattacks are usually aimed at accessing, changing, or destroying sensitive information."
+    },
+    {
+        "text": "Cloud Computing is the delivery of computing services—including servers, storage, databases, networking, software, analytics, and intelligence—over the Internet ('the cloud') to offer faster innovation, flexible resources, and economies of scale."
+    },
+    {
+        "text": "DevOps is a set of practices that combines software development (Dev) and IT operations (Ops). It aims to shorten the systems development life cycle and provide continuous delivery with high software quality."
+    },
+    {
+        "text": "ChatGPT is an AI chatbot developed by OpenAI based on the GPT (Generative Pre-trained Transformer) architecture. It is capable of generating human-like text, answering questions, and assisting with various tasks."
+    },
+    {
+        "text": "Large Language Models (LLMs) are deep learning algorithms that can recognize, summarize, translate, predict, and generate text and other content based on knowledge gained from massive datasets."
+    },
+    {
+        "text": "Generative AI refers to artificial intelligence capable of generating new content, such as text, images, audio, and video, in response to prompts. Examples include GPT-4, DALL-E, and Midjourney."
+    },
+    {
+        "text": "Transformers are a type of neural network architecture introduced by Google in 2017. They use self-attention mechanisms to process sequential data and are the foundation of modern LLMs like BERT and GPT."
+    },
+    {
+        "text": "BERT (Bidirectional Encoder Representations from Transformers) is a transformer-based model designed to understand the context of words in search queries. It revolutionized NLP by looking at words in relation to all other words in a sentence."
+    },
+    {
+        "text": "Artificial Intelligence (AI) is a broad field of computer science focused on creating systems capable of performing tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and language translation."
+    },
+    {
+        "text": "Machine Learning (ML) is a subset of AI that involves training algorithms to learn patterns from data and make predictions or decisions without being explicitly programmed for every rule."
+    },
+    {
+        "text": "Deep Learning is a specialized subset of machine learning inspired by the structure of the human brain. It uses multi-layered neural networks to model complex patterns in data like images, sound, and text."
+    },
+    {
+        "text": "FastAPI is a modern, fast (high-performance), web framework for building APIs with Python 3.7+ based on standard Python type hints. It is designed to be easy to use and production-ready."
+    },
+    {
+        "text": "Retrieval-Augmented Generation (RAG) is a technique that enhances Large Language Models (LLMs) by retrieving relevant information from an external knowledge base before generating a response. This reduces hallucinations and provides up-to-date information."
+    },
+    {
+        "text": "MLOps (Machine Learning Operations) is a set of practices that combines Machine Learning, DevOps, and Data Engineering to deploy and maintain ML systems in production reliably and efficiently."
+    },
+    {
+        "text": "Computer Vision is a field of AI that enables computers to derive meaningful information from digital images, videos, and other visual inputs, and take actions or make recommendations based on that information."
+    },
+    {
+        "text": "Natural Language Processing (NLP) is a branch of AI that helps computers understand, interpret, and manipulate human language. Examples include translation, sentiment analysis, and chatbots."
+    },
+    {
+        "text": "A Vector Database is a specialized database optimized for storing and querying high-dimensional vectors (embeddings). It is crucial for semantic search and RAG applications."
+    },
+    {
+        "text": "CLIP (Contrastive Language-Image Pre-Training) is a neural network trained on a variety of (image, text) pairs. It can be instructed in natural language to predict the most relevant text snippet, given an image, without directly optimizing for the task."
+    },
+    {
+        "text": "Transformer models, introduced in the paper 'Attention Is All You Need', are the foundation of modern NLP. They use self-attention mechanisms to process input data in parallel, enabling state-of-the-art performance."
+    },
+    {
+        "text": "Docker is a platform for developing, shipping, and running applications in containers. It ensures consistency across different environments by packaging code and dependencies together."
+    },
+    {
+        "text": "Kubernetes (K8s) is an open-source system for automating deployment, scaling, and management of containerized applications."
+    },
+    {
+        "text": "Supervised Learning is a type of machine learning where the model is trained on labeled data, meaning the input comes with the correct output."
+    },
+    {
+        "text": "Unsupervised Learning involves training models on data without labels. The goal is to find hidden structures or patterns, such as clustering similar items."
+    },
+    {
+        "text": "Reinforcement Learning is an area of ML where an agent learns to make decisions by performing actions in an environment and receiving rewards or penalties."
+    },
+    {
+        "text": "Bias in AI refers to systematic errors in a computer system that create unfair outcomes, such as privileging one arbitrary group of users over others. It often stems from biased training data."
+    },
+    {
+        "text": "Overfitting occurs when a machine learning model learns the training data too well, capturing noise and details that do not generalize to new, unseen data."
+    },
+    {
+        "text": "Underfitting happens when a model is too simple to capture the underlying structure of the data, leading to poor performance on both training and testing sets."
+    },
+    {
+        "text": "Hyperparameters are configuration settings used to tune how a model learns (e.g., learning rate, batch size), as opposed to parameters which are learned from the data."
+    },
+    {
+        "text": "This project is a Multimodal Retrieval-Augmented Generation (RAG) system capable of processing both text and images."
+    },
+    {
+        "text": "The system uses the CLIP model (openai/clip-vit-base-patch32) to create embeddings for both text and images, allowing for cross-modal search."
+    },
+    {
+        "text": "The Large Language Model (LLM) used in this system is Google's Flan-T5 (google/flan-t5-base), which generates natural language answers based on retrieved context."
+    },
+    {
+        "text": "For data ingestion, this system currently accepts text data in JSON format and images in standard formats like JPG and PNG. It uses FAISS for vector storage and retrieval."
+    }
+]

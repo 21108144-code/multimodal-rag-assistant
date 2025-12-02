@@ -1,0 +1,28 @@
+name: multimodal-rag
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pytorch
+  - torchvision
+  - faiss-cpu
+  - pip
+  - pip:
+    - fastapi
+    - uvicorn[standard]
+    - transformers
+    - pillow
+    - mlflow
+    - prometheus-client
+    - python-multipart
+    - pydantic
+    - pydantic-settings
+    - requests
+    - pytest
+    - httpx
+    - black
+    - flake8
+    - tqdm
+    - python-dotenv
