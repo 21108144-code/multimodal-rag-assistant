@@ -47,7 +47,7 @@ graph TD
 - **Multimodal Ingestion**: Handles images and text, performing OCR and preprocessing.
 - **State-of-the-Art Embeddings**: Uses CLIP/OpenCLIP for joint image-text vector space.
 - **Hybrid Retrieval**: Combines vector similarity with keyword search (BM25).
-- **Generative AI**: Integrates LLMs (e.g., Flan-T5) for answer synthesis.
+- **Generative AI**: Integrates LLMs (e.g., lama 3.3) for answer synthesis.
 - **Production API**: FastAPI service with Pydantic validation and async endpoints.
 - **MLOps Stack**:
   - **Tracking**: MLflow for experiment and model registry.
